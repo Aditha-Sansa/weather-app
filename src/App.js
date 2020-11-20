@@ -2,6 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import axios from 'axios';
 import { TempData, OtherTempData } from './components/TempData';
+import { CoordData } from './components/CoordData';
+import { WindData } from './components/WindData';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -10,7 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CardColumns from 'react-bootstrap/CardColumns';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form'
+import Form from 'react-bootstrap/Form';
 
 
 import 'fontsource-roboto/500.css';
@@ -28,6 +30,9 @@ class App extends React.Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.state = {
       main: [],
+      weather: [],
+      coord:[],
+      wind:[],
       query: ''
     };
   }
@@ -61,32 +66,35 @@ class App extends React.Component {
 
     axios.request(options)
       .then(res => {
-        const main = res.data.main;
-        this.setState({ main: main });
+        const result = res.data;
+        this.setState({ main: result.main });
+        this.setState({ weather: result.weather[0] });
+        this.setState({coord: result.coord});
+        this.setState({wind: result.wind});
+        console.log(result);
       }).catch(res => { console.log("Error occured:" + res) })
     // console.log(this.state.query);
   }
 
   render() {
     return (
-      <div>
-        <Container>
-          <Row className="searchrow">
-            <Col sm={8}><Form.Group><Form.Control size="lg" type="text" placeholder="Search by a city..." value={this.state.query} onChange={this.handleSearch} /></Form.Group></Col>
-            <Col sm={4}><Button variant="gradient" size="xxl" type="submit" onClick={(e) => this.onSubmit(e)} >Search</Button></Col>
-          </Row>
-        </Container>
-        <Container>
-          <Row>
-            <Col>
-              <CardColumns>
-                <TempData connection={this.state.main} />
-                <OtherTempData connection={this.state.main} />
-              </CardColumns>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+      <Container>
+        <Row className="searchrow">
+          <Col sm={8}><Form.Group><Form.Control size="lg" type="text" placeholder="Search by a city..." value={this.state.query} onChange={this.handleSearch} /></Form.Group></Col>
+          <Col sm={4}><Button variant="gradient" size="xxl" type="submit" onClick={(e) => this.onSubmit(e)} >Search</Button></Col>
+        </Row>
+        <Row>
+          <Col>
+            <CardColumns>
+              <TempData main={this.state.main} weather={this.state.weather}/>
+              <OtherTempData main={this.state.main} />
+              <CoordData coord={this.state.coord} />
+              <WindData wind={this.state.wind}/>
+            </CardColumns>
+          </Col>
+        </Row>
+      </Container>
+
     );
   }
 }
