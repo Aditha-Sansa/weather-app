@@ -1,5 +1,8 @@
 # Weather App
 
+![alt text](img/preview.gif)
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 ## Add the APP ID
 
