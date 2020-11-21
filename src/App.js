@@ -1,10 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
 import axios from 'axios';
-import { TempData, OtherTempData } from './components/TempData';
+import { TempData } from './components/TempData';
+import { PressureData } from './components/PressureData'
 import { CoordData } from './components/CoordData';
 import { WindData } from './components/WindData';
 import { SysData } from './components/SysData';
+import { SunData } from './components/SunData';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -14,6 +16,7 @@ import Col from 'react-bootstrap/Col';
 import CardColumns from 'react-bootstrap/CardColumns';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Navbar from 'react-bootstrap/Navbar';
 
 
 import 'fontsource-roboto/500.css';
@@ -32,9 +35,9 @@ class App extends React.Component {
     this.state = {
       main: [],
       weather: [],
-      coord:[],
-      wind:[],
-      sys:[],
+      coord: [],
+      wind: [],
+      sys: [],
       query: ''
     };
   }
@@ -69,10 +72,10 @@ class App extends React.Component {
     axios.request(options)
       .then(res => {
         const result = res.data;
-        this.setState({ 
-          main: result.main, 
-          weather: result.weather[0], 
-          coord: result.coord, 
+        this.setState({
+          main: result.main,
+          weather: result.weather[0],
+          coord: result.coord,
           wind: result.wind,
           sys: result.sys,
           name: result.name
@@ -85,18 +88,29 @@ class App extends React.Component {
   render() {
     return (
       <Container>
-        <Row className="searchrow">
-          <Col sm={8}><Form.Group><Form.Control size="lg" type="text" placeholder="Search by a city..." value={this.state.query} onChange={this.handleSearch} /></Form.Group></Col>
+        <Navbar bg="light" variant="light">
+          <Navbar.Brand><h2>Weather</h2></Navbar.Brand>
+          <Form inline className="mx-auto">
+            <Form.Control className="mr-sm-2" size="lg" type="text" placeholder="Search by a city..." value={this.state.query} onChange={this.handleSearch} />
+            <Button variant="gradient" size="xxl" type="submit" onClick={(e) => this.onSubmit(e)} >Search</Button>
+          </Form>
+        </Navbar>
+
+
+
+        {/* <Row className="searchrow">
+          <Col sm={4}><Form.Group><Form.Control size="lg" type="text" placeholder="Search by a city..." value={this.state.query} onChange={this.handleSearch} /></Form.Group></Col>
           <Col sm={4}><Button variant="gradient" size="xxl" type="submit" onClick={(e) => this.onSubmit(e)} >Search</Button></Col>
-        </Row>
-        <Row><Col md={{ span: 6, offset: 3 }} className="text-center"><SysData sys={this.state.sys} searchTerm={this.state.name}/></Col></Row>
+        </Row> */}
+        <Row><Col md={{ span: 6, offset: 3 }} className="text-center"><SysData sys={this.state.sys} searchTerm={this.state.name} weather={this.state.weather} /></Col></Row>
         <Row>
           <Col>
             <CardColumns>
-              <TempData main={this.state.main} weather={this.state.weather}/>
-              <OtherTempData main={this.state.main} />
+              <TempData main={this.state.main} weather={this.state.weather} />
               <CoordData coord={this.state.coord} />
-              <WindData wind={this.state.wind}/>
+              <PressureData main={this.state.main} />
+              <WindData wind={this.state.wind} />
+              <SunData sys={this.state.sys} />
             </CardColumns>
           </Col>
         </Row>
