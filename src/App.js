@@ -4,6 +4,7 @@ import axios from 'axios';
 import { TempData, OtherTempData } from './components/TempData';
 import { CoordData } from './components/CoordData';
 import { WindData } from './components/WindData';
+import { SysData } from './components/SysData';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -33,6 +34,7 @@ class App extends React.Component {
       weather: [],
       coord:[],
       wind:[],
+      sys:[],
       query: ''
     };
   }
@@ -67,10 +69,14 @@ class App extends React.Component {
     axios.request(options)
       .then(res => {
         const result = res.data;
-        this.setState({ main: result.main });
-        this.setState({ weather: result.weather[0] });
-        this.setState({coord: result.coord});
-        this.setState({wind: result.wind});
+        this.setState({ 
+          main: result.main, 
+          weather: result.weather[0], 
+          coord: result.coord, 
+          wind: result.wind,
+          sys: result.sys,
+          name: result.name
+        });
         console.log(result);
       }).catch(res => { console.log("Error occured:" + res) })
     // console.log(this.state.query);
@@ -83,6 +89,7 @@ class App extends React.Component {
           <Col sm={8}><Form.Group><Form.Control size="lg" type="text" placeholder="Search by a city..." value={this.state.query} onChange={this.handleSearch} /></Form.Group></Col>
           <Col sm={4}><Button variant="gradient" size="xxl" type="submit" onClick={(e) => this.onSubmit(e)} >Search</Button></Col>
         </Row>
+        <Row><Col md={{ span: 6, offset: 3 }} className="text-center"><SysData sys={this.state.sys} searchTerm={this.state.name}/></Col></Row>
         <Row>
           <Col>
             <CardColumns>

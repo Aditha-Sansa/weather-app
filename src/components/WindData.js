@@ -1,7 +1,7 @@
 import React from 'react';
-import Card from 'react-bootstrap/Card'
-import ListGroup from 'react-bootstrap/ListGroup'
-import Image from 'react-bootstrap/Image'
+import Card from 'react-bootstrap/Card';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Image from 'react-bootstrap/Image';
 
 export class WindData extends React.Component {
 
